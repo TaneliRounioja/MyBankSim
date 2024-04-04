@@ -1,9 +1,9 @@
 const express=require('express');
-const router=express.router();
-const student=require('..models/card_model');
+const router=express.Router();
+const card=require('../models/card_model');
 
 router.get('/',function(request, response){
-    card.getAllCard(function(err, result){
+    card.getAllCards(function(err, result){
         if(err){
             response.send(err);
         }
