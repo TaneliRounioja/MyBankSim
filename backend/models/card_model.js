@@ -5,7 +5,7 @@ const card = {
         return db.query("SELECT * FROM card", callback);
     },
     getOneCard(id, callback) {
-        return db.query("SELECT * FROM card WHERE card_id=?", [id], callback);
+        return db.query("SELECT * FROM card WHERE idCard=?", [id], callback);
     },
     addCard(newCard, callback) {
         bcrypt.hash(newCard.pin,10,function(err,cryptedPin){
@@ -20,7 +20,7 @@ const card = {
         });
     },
     deleteCard(id, callback) {
-        return db.query("DELETE FROM card WHERE card_id=?", [id], callback);
+        return db.query("DELETE FROM card WHERE idCard=?", [id], callback);
     }
 };
 
