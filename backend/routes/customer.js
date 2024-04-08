@@ -1,68 +1,59 @@
-const express=require('express');
-const router=express.Router();
-const card=require('../models/card_model');
+const express = require('express');
+const router = express.Router();
+const customer = require('../models/customer_model');
 
-router.get('/',function(request, response){
-    card.getAllCards(function(err, result){
-        if(err){
+router.get('/', function(request, response) {
+    customer.getAllCustomers(function(err, result) {
+        if (err) {
             response.send(err);
-        }
-        else{
+        } else {
             console.log(result);
             response.json(result);
         }
-    })
+    });
 });
 
-router.get('/:usern',function(request, response){
-    card.GetOneCard(request.params.usern,function(err, result){
-        if(err){
+router.get('/:idcustomer', function(request, response) {
+    customer.getOneCustomer(request.params.idcustomer, function(err, result) {
+        if (err) {
             response.send(err);
-        }
-        else{
+        } else {
             console.log(result);
             response.json(result[0]);
         }
-    })  
+    });
 });
 
-router.post('/',function(request,response){
-    card.addCard(request.body, function(err,result){
-        if(err){
+router.post('/', function(request, response) {
+    customer.addCustomer(request.body, function(err, result) {
+        if (err) {
             response.send(err);
-        }
-        else{
+        } else {
             response.json(result);
-
         }
     });
 });
 
-router.put('/:usern', function(request, response){
-    card.updateCard(request.params.usern, request.body, function(err, result){
-        if(err){
+router.put('/:idcustomer', function(request, response) {
+    customer.updateCustomer(request.params.idcustomer, request.body, function(err, result) {
+        if (err) {
             response.send(err);
-        }
-        else{
-
+        } else {
             console.log(result.affectedRows);
             response.json(result.affectedRows);
         }
     });
 });
 
-router.delete('/:usern', function(request, response){
-    card.deleteCard(request.params.usern, function(err,result){
-        if(err){
+router.delete('/:idcustomer', function(request, response) {
+    customer.deleteCustomer(request.params.idcustomer, function(err, result) {
+        if (err) {
             response.send(err);
-        }
-        else{
-
+        } else {
             console.log(result.affectedRows);
             response.json(result.affectedRows);
         }
     });
 });
 
-
-module.exports=router;
+module.exports = router;
