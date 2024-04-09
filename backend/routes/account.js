@@ -1,6 +1,6 @@
 const express=require('express');
 const router=express.Router();
-const account=require('../models/account_model');
+const account=require('../models/account.model');
 
 router.get('/', function(request, response){
     account.getAllAccounts(function(err,result){
@@ -24,7 +24,7 @@ router.get('/:id', function(request, response){
     })
 });
 
-router.get('/account_balance/:id?', function(request,response){
+router.get('/balance/:id?', function(request,response){
     account.getBalance(request.params.id, function(err,result){
         if(err){
             response.send(err);
