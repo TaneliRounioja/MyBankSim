@@ -24,7 +24,7 @@ router.get('/:id', function(request, response){
     })
 });
 
-router.get('/account_balance/:id?', function(request,response){
+router.get('/balance/:id?', function(request,response){
     account.getBalance(request.params.id, function(err,result){
         if(err){
             response.send(err);
