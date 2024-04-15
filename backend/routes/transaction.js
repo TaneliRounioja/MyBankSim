@@ -36,7 +36,6 @@ router.get('/:id', function(request, response) {
 router.post('/', (request, response) => {
     const transactionData = request.body;
  
-    // Check if idaccount is provided
     if (!transactionData.idaccount) {
         return response.status(400).json({ error: "idaccount is required" });
     }
