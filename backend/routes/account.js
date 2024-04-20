@@ -30,7 +30,7 @@ router.get('/balance/:id?', function(request,response){
             response.send(err);
         }
         else{
-            response.json(dbResult[0]);
+            response.json(result[0]);
         }
     })
 });
