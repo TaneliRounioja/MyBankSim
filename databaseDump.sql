@@ -29,6 +29,7 @@ CREATE TABLE `account` (
   `fname` varchar(45) DEFAULT NULL,
   `idcustomer` int DEFAULT NULL,
   `balance` decimal(10,2) DEFAULT NULL,
+  `credit` double DEFAULT NULL,
   PRIMARY KEY (`idaccount`),
   KEY `customer_account_idx` (`idcustomer`),
   CONSTRAINT `customer_account` FOREIGN KEY (`idcustomer`) REFERENCES `customer` (`idcustomer`) ON DELETE RESTRICT ON UPDATE CASCADE
@@ -41,7 +42,7 @@ CREATE TABLE `account` (
 
 LOCK TABLES `account` WRITE;
 /*!40000 ALTER TABLE `account` DISABLE KEYS */;
-INSERT INTO `account` VALUES (1,'teppo',1,1000.00);
+INSERT INTO `account` VALUES (1,'teppo',1,1000.00, 1000.00),(2, 'seppo',2,2000.00, 2000.00);
 /*!40000 ALTER TABLE `account` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -108,13 +109,13 @@ DROP TABLE IF EXISTS `transaction`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `transaction` (
-  `idAccount Transactions` int NOT NULL AUTO_INCREMENT,
+  `idTransactions` int NOT NULL AUTO_INCREMENT,
   `idaccount` int NOT NULL,
   `transaction_date` datetime DEFAULT NULL,
   `Transaction` varchar(45) DEFAULT NULL,
   `Amount` decimal(10,2) DEFAULT NULL,
   `Account Number` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`idAccount Transactions`),
+  PRIMARY KEY (`idTransactions`),
   KEY `account_transaction_idx` (`idaccount`),
   CONSTRAINT `account_transaction` FOREIGN KEY (`idaccount`) REFERENCES `account` (`idaccount`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
@@ -137,5 +138,47 @@ UNLOCK TABLES;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+
+DROP PROCEDURE IF EXISTS `debit_transfer`;
+DELIMITER //
+CREATE PROCEDURE debit_transfer(IN sender_id INT, IN recipient_id INT, IN amount DOUBLE )
+  BEGIN
+  DECLARE balancetest1,balancetest2 INT DEFAULT 0;
+  START TRANSACTION;
+  UPDATE account SET balance=balance-amount WHERE idaccount=sender_id AND balance >= amount;
+  SET balancetest1=ROW_COUNT();
+  UPDATE account SET balance=balance+amount WHERE idaccount=recipient_id;
+  SET balancetest2=ROW_COUNT();
+    IF (balancetest1 > 0 AND balancetest2 >0) THEN   
+      COMMIT;    
+      INSERT INTO transaction(idaccount,transaction,amount,transaction_date) VALUES(sender_id,'withdrawal',amount,NOW());
+      INSERT INTO transaction(idaccount,transaction,amount,transaction_date) VALUES(recipient_id,'deposit',amount,NOW());
+    ELSE
+      ROLLBACK;
+  END IF;
+  END //
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `credit_transfer`;
+DELIMITER //
+CREATE PROCEDURE credit_transfer(IN sender_id INT, IN recipient_id INT, IN amount DOUBLE )
+BEGIN
+  DECLARE balancetest1, balancetest2 INT DEFAULT 0;
+  START TRANSACTION;
+  UPDATE account SET balance=balance-amount WHERE idaccount=sender_id AND balance + credit >= amount;
+  SET balancetest1=ROW_COUNT();
+  UPDATE account SET balance=balance+amount WHERE idaccount=recipient_id;
+  SET balancetest2=ROW_COUNT();
+    IF (balancetest1 > 0 AND balancetest2 >0) THEN
+      COMMIT;
+      INSERT INTO transaction(idaccount,transaction,amount,transaction_date) VALUES(sender_id,'withdrawal',amount,NOW());
+      INSERT INTO transaction(idaccount,transaction,amount,transaction_date) VALUES(recipient_id,'deposit',amount,NOW());
+    ELSE
+      ROLLBACK;
+  END IF;
+END //
+DELIMITER ;
+
 
 -- Dump completed on 2024-04-04 15:38:55

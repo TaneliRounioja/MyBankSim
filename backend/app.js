@@ -9,6 +9,7 @@ var accountRouter = require('./routes/account');
 var usersRouter = require('./routes/users');
 var cardRouter = require('./routes/card');
 var loginRouter = require('./routes/login');
+var transferRouter = require('./routes/transfer');
 
 
 var app = express();
@@ -20,12 +21,14 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/login', loginRouter);
-
 app.use(authenticateToken);
+
 app.use('/', indexRouter);
 app.use('/account', accountRouter);
 app.use('/users', usersRouter);
 app.use('/card',cardRouter);
+app.use('/transfer',transferRouter);
+
 
 function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization']
