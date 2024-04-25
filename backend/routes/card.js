@@ -14,8 +14,8 @@ router.get('/',function(request, response){
     })
 });
 
-router.get('/:usern',function(request, response){
-    card.GetOneCard(request.params.usern,function(err, result){
+router.get('/:id',function(request, response){
+    card.getOneCard(request.params.id,function(err, result){
         if(err){
             response.send(err);
         }
@@ -38,8 +38,8 @@ router.post('/',function(request,response){
     });
 });
 
-router.put('/:usern', function(request, response){
-    card.updateCard(request.params.usern, request.body, function(err, result){
+router.put('/:id', function(request, response){
+    card.updateCard(request.params.id, request.body, function(err, result){
         if(err){
             response.send(err);
         }
@@ -51,8 +51,8 @@ router.put('/:usern', function(request, response){
     });
 });
 
-router.delete('/:usern', function(request, response){
-    card.deleteCard(request.params.usern, function(err,result){
+router.delete('/:id', function(request, response){
+    card.deleteCard(request.params.id, function(err,result){
         if(err){
             response.send(err);
         }

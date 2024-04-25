@@ -3,6 +3,8 @@
 #include "ui_mainwindow.h"
 #include "qmessagebox"
 
+#include <accountMenu.h>
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -45,13 +47,13 @@ void MainWindow::loginSlot(QNetworkReply *reply)
     }
     else{
         if(response_data!="false"){
-            msgBox.setText("ok");
-            msgBox.exec();
+            //msgBox.setText("ok");
+            //msgBox.exec();
             //kirjautuminen onnistui
-            /*StudentMenu *objectStudentMenu=new StudentMenu(this);
-            objectStudentMenu->setUsername(ui->textUsername->text());
-            objectStudentMenu->setWebToken(response_data);
-            objectStudentMenu->show();*/
+            AccountMenu *objectaccountMenu=new AccountMenu(this);
+            objectaccountMenu->setUsername(ui->textUsername->text());
+            objectaccountMenu->setWebToken(response_data);
+            objectaccountMenu->show();
         }
         else{
             msgBox.setText("Tunnus/salasana ei täsmää");
