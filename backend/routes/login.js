@@ -7,7 +7,7 @@ const dotenv=require('dotenv');
 dotenv.config();
 
 router.get('/', function(request, response){
-    response.send('GET-pyyntö vastaanotettu');
+        response.send('GET-pyyntö vastaanotettu');
 });
 
 router.post('/',function(request, response){
@@ -47,7 +47,7 @@ router.post('/',function(request, response){
 
 function genToken(idCard){
     dotenv.config();
-    return jwt.sign(idCard, process.env.MY_TOKEN, {expiresIn: '1800s'});
+    return jwt.sign(idCard, process.env.MY_TOKEN, {expiresIn: '18000s'});
 }
 
 module.exports=router;
